@@ -1,0 +1,122 @@
+@font-face {
+  font-family: 'Roboto Mono';
+  src:
+    local('Roboto Mono'),
+    url('./fonts/static/RobotoMono-Regular.ttf') format('truetype');
+}
+
+body {
+  font-family: Roboto Mono, monospace;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #585858; /* Text (Primary) */
+  background-color: #FFFFFF; /* Background */
+}
+
+header {
+  background-color: #AFD7AF; /* Headers */
+  color: #444444;
+  padding: 1rem;
+  text-align: center;
+}
+
+main {
+  margin: 2rem auto;
+  max-width: 100%;
+  background: #FFFFFF; /* Highlights */
+  border: 1px solid #9E9E9E; /* Borders & Lines */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+h1 {
+  color: #444444;
+}
+
+h2 {
+  color: #87AF87; /* Headers */
+  cursor: pointer;
+}
+
+/* General Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensures tables adjust to content */
+  overflow-x: auto; /* Allows horizontal scrolling if content overflows */
+  margin-bottom: 1rem;
+}
+
+table th, table td {
+  border: 1px solid #9E9E9E; /* Borders & Lines */
+  padding: 8px;
+  text-align: left;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+table th {
+  background-color: #AFD7AF; /* Headers */
+  color: #444444;
+  font-weight: bold;
+}
+
+/* Navigation Styling */
+nav {
+  position: sticky;
+  top: 0;
+  background-color: #D7D7D7; /* Highlights */
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  z-index: 1000;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+nav ul li {
+  margin: 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #87AFD7; /* Links */
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.minor {
+  color: #878787; /* Minor Impact */
+  font-weight: bold;
+}
+
+.moderate {
+  color: #D7AF87; /* Moderate Impact */
+  font-weight: bold;
+}
+
+.serious {
+  color: #D78787; /* Serious Impact */
+  font-weight: bold;
+}
+
+/* Status Indicators */
+.error {
+  color: #AF5F5F;
+}
+
+.warning {
+  color: #D7AF87;
+}
+
