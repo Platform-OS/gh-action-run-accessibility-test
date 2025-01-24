@@ -54,7 +54,7 @@ runs:
           mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
 
           cp ./test-results/**/*.json $SCRIPT_DIR
-          $ACTION_PATH/create-report-index-file.sh $SCRIPT_DIR
+          $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
 
           MPKIT_URL=$UPLOAD_HOST
           pos-cli deploy -p
