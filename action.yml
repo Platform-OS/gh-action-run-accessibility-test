@@ -1,0 +1,84 @@
+name: 'Run accessibility tests'
+description: 'Run Playwright tests and upload the report'
+inputs:
+  test-name:
+    description: 'test name'
+    required: true
+  before:
+    required: false
+  after:
+    required: false
+  skip:
+    required: false
+  npm-prefix:
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+
+      - name: before ${{ inputs.test-name }}
+        if: ${{ inputs.before && !inputs.skip }}
+        shell: sh
+        run: |
+          ${{ inputs.before }}
+
+      - name: run ${{ inputs.test-name }}
+        if: ${{ !inputs.skip }}
+        shell: sh
+        run: |
+          npm run ${{ inputs.test-name }} --prefix ${{ inputs.npm-prefix }}
+        env:
+          HOME: /root
+
+      - name: after ${{ inputs.test-name }}
+        if: ${{ inputs.after && !inputs.skip }}
+        shell: sh
+        run: |
+          ${{ inputs.after }}
+
+      - name: publish report ${{ inputs.test-name }}
+        id: publish-report
+        if:  ${{ !inputs.skip && always() }}
+        shell: sh
+        run: |
+          set -eu
+          TIMESTAMP=$(date '+%Y%m%d%H%M%S')
+          PAGE_DIR=app/views/pages
+          ASSETS_DIR=app/assets
+          IMAGE_DIR=$ASSETS_DIR/images
+          SCRIPT_DIR=$ASSETS_DIR/scripts
+
+          cp {{ github.action_path }}/app/* ./app
+
+          mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
+
+          cp ./test-results/**/*.json $SCRIPT_DIR
+          {{ github.action_path }}/create-report-index-file.sh $SCRIPT_DIR
+
+          MPKIT_URL=$UPLOAD_HOST
+          pos-cli deploy -p
+
+          URL=$MPKIT_URL/$TIMESTAMP
+          echo "REPORT_URL=$URL" >> $GITHUB_OUTPUT
+          echo "pw-tests-report-url=$URL" >> $GITHUB_OUTPUT
+
+      - name: remove report directory
+        if:  ${{ !inputs.skip && always() }}
+        shell: sh
+        run: |
+          rm -rf playwright-report
+
+      - name: summary
+        if:  ${{ !inputs.skip && always() }}
+        shell: sh
+        run: |
+          echo "### TEST REPORT" >> $GITHUB_STEP_SUMMARY
+          echo "#### Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "#### Test report URL: ${{ steps.publish-report.outputs.REPORT_URL }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: skip ${{ inputs.test-name }}
+        if: ${{ !!inputs.skip }}
+        shell: sh
+        run: echo skipping ${{ inputs.test-name }}
+

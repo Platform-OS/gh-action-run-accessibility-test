@@ -1,5 +1,5 @@
-async function loadJSON() {
-  const response = await fetch("../../assets/json/report.json");
+async function loadJSON(file) {
+  const response = await fetch(file);
   if (!response.ok) {
     throw new Error("Failed to load JSON report");
   }
@@ -36,8 +36,8 @@ function createSection(title, rules, id, isExpanded = false) {
 
   // Add a collapsible header
   section.innerHTML = `
-    <h2 class="collapsible ${isExpanded ? "active" : ""}" style="cursor: pointer;">
-      <span class="indicator">${isExpanded ? "▼" : "►"}</span> ${title} (${rules.length})</h2>
+    <h3 class="collapsible ${isExpanded ? "active" : ""}" style="cursor: pointer;">
+      <span class="indicator">${isExpanded ? "▼" : "►"}</span> ${title} (${rules.length})</32>
     <div class="content" style="display: ${isExpanded ? "block" : "none"};">
       ${rules.length === 0 ? `<p>No ${title.toLowerCase()} found.</p>` : createTable(rules, id)}
     </div>
@@ -105,7 +105,7 @@ function renderTableBody(rules) {
 }
 
 function addSortingListeners(data) {
-  const report = document.getElementById("report");
+  const report = document.getElementById("reports");
 
   report.addEventListener("click", (event) => {
     const header = event.target.closest(".sortable");
@@ -136,32 +136,52 @@ function addSortingListeners(data) {
 }
 
 async function renderReport() {
-  try {
-    const data = await loadJSON();
+  const report = document.getElementById("reports");
+  const reportFiles = jsonFiles;
 
-    // Organize data by section for sorting
-    const sectionData = {
-      violations: data.violations,
-      incomplete: data.incomplete,
-      passes: data.passes,
-      inapplicable: data.inapplicable,
-    };
+  report.innerHTML = ""; // Clear existing content
 
-    const report = document.getElementById("report");
-    report.innerHTML = "";
+  for (const file of reportFiles) {
+    try {
+      const data = await loadJSON(file);
+      const pageName = file.match(/\w+/)[0];
 
-    // Add sections
-    report.appendChild(createSection("Violations", sectionData.violations, "violations", true)); // Expanded by default
-    report.appendChild(createSection("Incomplete", sectionData.incomplete, "incomplete"));
-    report.appendChild(createSection("Passes", sectionData.passes, "passes"));
-    report.appendChild(createSection("Inapplicable", sectionData.inapplicable, "inapplicable"));
+      // Organize data by section for sorting
+      const sectionData = {
+        violations: data.violations,
+        incomplete: data.incomplete,
+        passes: data.passes,
+        inapplicable: data.inapplicable,
+      };
 
-    // Add sorting listeners using event delegation
-    addSortingListeners(sectionData);
-  } catch (error) {
-    console.error(error);
-    const report = document.getElementById("report");
-    report.innerHTML = `<p class="error">Failed to load report: ${error.message}</p>`;
+      // Create a parent wrapper for this file's sections
+      const reportWrapper = document.createElement("div");
+      reportWrapper.className = "report-wrapper";
+      reportWrapper.id = `report-wrapper-${file}`; // Optional: Add unique ID for each wrapper
+
+      // Add an h2 heading to the wrapper
+      const heading = document.createElement("h2");
+      heading.textContent = `Report for ${pageName} page`;
+      reportWrapper.appendChild(heading);
+
+      // Add sections for this file
+      reportWrapper.appendChild(createSection("Violations", sectionData.violations, "violations", true)); // Expanded by default
+      reportWrapper.appendChild(createSection("Incomplete", sectionData.incomplete, "incomplete"));
+      reportWrapper.appendChild(createSection("Passes", sectionData.passes, "passes"));
+      reportWrapper.appendChild(createSection("Inapplicable", sectionData.inapplicable, "inapplicable"));
+
+      // Append the wrapper to the main report container
+      report.appendChild(reportWrapper);
+
+      // Add sorting listeners for this file's sections using event delegation
+      addSortingListeners(sectionData);
+    } catch (error) {
+      console.error(error);
+      const errorWrapper = document.createElement("div");
+      errorWrapper.className = "error-wrapper";
+      errorWrapper.innerHTML = `<p class="error">Failed to load report for file "${file}": ${error.message}</p>`;
+      report.appendChild(errorWrapper);
+    }
   }
 }
 
