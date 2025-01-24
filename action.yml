@@ -49,7 +49,7 @@ runs:
           IMAGE_DIR=$ASSETS_DIR/images
           SCRIPT_DIR=$ASSETS_DIR/scripts
 
-          cp $ACTION_PATH/app/* ./app
+          cp -r $ACTION_PATH/app/* ./app
 
           mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
 
