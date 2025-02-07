@@ -44,21 +44,21 @@ runs:
         run: |
           set -eu
           TIMESTAMP=$(date '+%Y%m%d%H%M%S')
-          REPORT_DIR=playwright-report
-          TEST_RESULTS_DIR=test-results
-          PAGE_DIR=$REPORT_DIR/app/views/pages
-          ASSETS_DIR=$REPORT_DIR/app/assets
+          PAGE_DIR=app/views/pages
+          ASSETS_DIR=app/assets
           IMAGE_DIR=$ASSETS_DIR/images
           SCRIPT_DIR=$ASSETS_DIR/scripts
+          REPORT_DIR=playwright-report
+          TEST_RESULTS_DIR=test-results
+          MPKIT_URL=$UPLOAD_HOST
 
-          cp -r $ACTION_PATH/app $REPORT_DIR
+          cp ./test-results/**/*.json $SCRIPT_DIR
+          $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
 
           mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
 
-          cp $TEST_RESULTS_DIR/**/*.json $SCRIPT_DIR
-          $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
+          cp -r $ACTION_PATH/app $REPORT_DIR
 
-          MPKIT_URL=$UPLOAD_HOST
           cd $REPORT_DIR
           pos-cli deploy -p
 
