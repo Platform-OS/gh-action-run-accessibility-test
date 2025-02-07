@@ -44,12 +44,12 @@ runs:
         run: |
           set -eu
           TIMESTAMP=$(date '+%Y%m%d%H%M%S')
-          PAGE_DIR=app/views/pages
-          ASSETS_DIR=app/assets
-          IMAGE_DIR=$ASSETS_DIR/images
-          SCRIPT_DIR=$ASSETS_DIR/scripts
           REPORT_DIR=playwright-report
           TEST_RESULTS_DIR=test-results
+          PAGE_DIR=$REPORT_DIR/app/views/pages
+          ASSETS_DIR=$REPORT_DIR/app/assets
+          IMAGE_DIR=$ASSETS_DIR/images
+          SCRIPT_DIR=$ASSETS_DIR/scripts
           MPKIT_URL=$UPLOAD_HOST
 
           cp -r $ACTION_PATH/app $REPORT_DIR
