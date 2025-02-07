@@ -52,15 +52,13 @@ runs:
           TEST_RESULTS_DIR=test-results
           MPKIT_URL=$UPLOAD_HOST
 
-          echo "Processing json files..."
-          cp $TEST_RESULTS_DIR/**/*.json $ACTION_PATH/$SCRIPT_DIR
-          $ACTION_PATH/list-json-files.sh $ACTION_PATH/$SCRIPT_DIR
-
-          mv $ACTION_PATH/$PAGE_DIR/index.liquid $ACTION_PATH/$PAGE_DIR/$TIMESTAMP.liquid
-
           cp -r $ACTION_PATH/app $REPORT_DIR
 
-          cd $REPORT_DIR
+          mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
+
+          cp $TEST_RESULTS_DIR/**/*.json $SCRIPT_DIR
+          $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
+
           pos-cli deploy -p
 
           URL=$MPKIT_URL/$TIMESTAMP

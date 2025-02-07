@@ -2,7 +2,7 @@
 
 SCRIPT_DIR=${1:-.}
 
-filenames=$(find "$SCRIPT_DIR" -type f -name '*accessibility-scan-results.json' | sed 's|^app||' | sort -u)
+filenames=$(find "$SCRIPT_DIR" -type f -name '*accessibility-scan-results.json' | sed 's|^.*\/app||' | sort -u)
 
 OUTPUT_FILE=$SCRIPT_DIR/json_files.js
 
