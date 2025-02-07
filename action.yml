@@ -53,7 +53,7 @@ runs:
           MPKIT_URL=$UPLOAD_HOST
 
           echo "Processing json files..."
-          cp $TEST_RESULTS/**/*.json $ACTION_PATH/$SCRIPT_DIR
+          cp $TEST_RESULTS_DIR/**/*.json $ACTION_PATH/$SCRIPT_DIR
           $ACTION_PATH/list-json-files.sh $ACTION_PATH/$SCRIPT_DIR
 
           mv $ACTION_PATH/$PAGE_DIR/index.liquid $ACTION_PATH/$PAGE_DIR/$TIMESTAMP.liquid
