@@ -59,6 +59,7 @@ runs:
           cp $TEST_RESULTS_DIR/**/*.json $SCRIPT_DIR
           $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
 
+          cd $REPORT_DIR
           pos-cli deploy -p
 
           URL=$MPKIT_URL/$TIMESTAMP
