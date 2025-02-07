@@ -52,10 +52,11 @@ runs:
           TEST_RESULTS_DIR=test-results
           MPKIT_URL=$UPLOAD_HOST
 
-          cp ./test-results/**/*.json $SCRIPT_DIR
-          $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
+          echo "Processing json files..."
+          cp $TEST_RESULTS/**/*.json $ACTION_PATH/$SCRIPT_DIR
+          $ACTION_PATH/list-json-files.sh $ACTION_PATH/$SCRIPT_DIR
 
-          mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
+          mv $ACTION_PATH/$PAGE_DIR/index.liquid $ACTION_PATH/$PAGE_DIR/$TIMESTAMP.liquid
 
           cp -r $ACTION_PATH/app $REPORT_DIR
 
