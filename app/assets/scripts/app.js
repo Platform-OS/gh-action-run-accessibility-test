@@ -37,7 +37,7 @@ function createSection(title, rules, id, isExpanded = false) {
   // Add a collapsible header
   section.innerHTML = `
     <h3 class="collapsible ${isExpanded ? "active" : ""}" style="cursor: pointer;">
-      <span class="indicator">${isExpanded ? "▼" : "►"}</span> ${title} (${rules.length})</32>
+      <span class="indicator">${isExpanded ? "▼" : "►"}</span> ${title} (${rules.length})</h3>
     <div class="content" style="display: ${isExpanded ? "block" : "none"};">
       ${rules.length === 0 ? `<p>No ${title.toLowerCase()} found.</p>` : createTable(rules, id)}
     </div>
@@ -49,6 +49,10 @@ function createSection(title, rules, id, isExpanded = false) {
   const indicator = section.querySelector(".indicator");
 
   header.addEventListener("click", () => {
+    if (event.target.closest("table")) {
+      return;
+    }
+
     const isHidden = content.style.display === "none";
     content.style.display = isHidden ? "block" : "none";
     header.classList.toggle("active", isHidden);
@@ -157,7 +161,7 @@ async function renderReport() {
       // Create a parent wrapper for this file's sections
       const reportWrapper = document.createElement("div");
       reportWrapper.className = "report-wrapper";
-      reportWrapper.id = `report-wrapper-${file}`; // Optional: Add unique ID for each wrapper
+      reportWrapper.id = `report-wrapper-${pageName}`; // Optional: Add unique ID for each wrapper
 
       // Add an h2 heading to the wrapper
       const heading = document.createElement("h2");
