@@ -144,7 +144,7 @@ async function renderReport() {
   for (const file of reportFiles) {
     try {
       const data = await loadJSON(file);
-      const pageName = file.match(/\w+/)[0];
+      const pageName = file.match(/scripts\/(\w+)/)[1];
 
       // Organize data by section for sorting
       const sectionData = {
