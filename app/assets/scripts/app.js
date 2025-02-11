@@ -52,9 +52,9 @@ function createTable(rules, sectionId) {
     <table class="report-table" data-section="${sectionId}">
       <thead>
         <tr>
-          <th class="sortable" data-column="id" data-order="asc">ID</th>
+          <th data-column="id" data-order="asc">ID</th>
           <th>Description</th>
-          <th class="sortable" data-column="impact" data-order="asc">Impact</th>
+          <th data-column="impact" data-order="asc">Impact</th>
           <th>Help</th>
           <th>Nodes</th>
         </tr>
