@@ -126,6 +126,11 @@ nav ul li a:hover {
   font-weight: bold;
 }
 
+.critical {
+  color: #AF5F5F; /* Critical Impact */
+  font-weight: bold;
+}
+
 /* Status Indicators */
 .error {
   color: #AF5F5F;
