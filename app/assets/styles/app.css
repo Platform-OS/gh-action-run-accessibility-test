@@ -1,47 +1,8 @@
-@font-face {
-  font-family: 'Roboto Mono';
-  src:
-    local('Roboto Mono'),
-    url('./fonts/static/RobotoMono-Regular.ttf') format('truetype');
-}
-
 body {
-  font-family: Roboto Mono, monospace;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-  color: #585858; /* Text (Primary) */
-  background-color: #FFFFFF; /* Background */
+  font-family: Roboto, monospace;
 }
-
-header {
-  background-color: #AFD7AF; /* Headers */
-  color: #444444;
-  padding: 1rem;
-  text-align: center;
-}
-
-main {
-  margin: 2rem auto;
-  max-width: 100%;
-  background: #FFFFFF; /* Highlights */
-  border: 1px solid #9E9E9E; /* Borders & Lines */
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-}
-
-h1 {
-  color: #444444;
-}
-
-h2 {
-  color: #87AF87; /* Headers */
-  cursor: pointer;
-}
-
 /* General Table Styling */
-table {
+.modern-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed; /* Ensures tables adjust to content */
@@ -49,95 +10,49 @@ table {
   margin-bottom: 1rem;
 }
 
-table th, table td {
-  border: 1px solid #9E9E9E; /* Borders & Lines */
-  padding: 8px;
+.modern-table th, .modern-table td {
+  border: 1.5px solid black; /* Stronger borders for visibility */
+  padding: 10px;
   text-align: left;
-  overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
-table th {
-  background-color: #AFD7AF; /* Headers */
-  color: #444444;
+/* Header Styling */
+.modern-table th {
+  background-color: #3498db;
+  color: white;
   font-weight: bold;
-}
-
-/* Navigation Styling */
-nav {
   position: sticky;
   top: 0;
-  background-color: #D7D7D7; /* Highlights */
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
-  z-index: 1000;
+  z-index: 2;
 }
 
-nav ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 1rem;
+/* Zebra Striping for Readability */
+.modern-table tbody tr:nth-child(even) {
+  background-color: #f8f8f8;
 }
 
-nav ul li {
-  margin: 0;
+/* Impact Level Styling */
+.critical { color: #d9534f; font-weight: bold; }
+.serious { color: #f0ad4e; font-weight: bold; }
+.moderate { color: #f7c04c; font-weight: bold; }
+.minor { color: #9e9e9e; font-weight: bold; }
+
+/* Expandable Nodes */
+details {
+  cursor: pointer;
 }
 
-nav ul li a {
-  text-decoration: none;
-  color: #87AFD7; /* Links */
-}
-
-nav ul li a:hover {
-  text-decoration: underline;
-}
-
-.report-wrapper {
-  margin-bottom: 40px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-.report-wrapper h2 {
-  margin-bottom: 15px;
-  padding: 10px;
-  background-color: #e0e0e0;
-  border-left: 5px solid #007bff;
-  font-size: 1.5em;
-}
-
-.minor {
-  color: #878787; /* Minor Impact */
+summary {
   font-weight: bold;
+  color: #007bff;
 }
 
-.moderate {
-  color: #D7AF87; /* Moderate Impact */
-  font-weight: bold;
-}
-
-.serious {
-  color: #D78787; /* Serious Impact */
-  font-weight: bold;
-}
-
-.critical {
-  color: #AF5F5F; /* Critical Impact */
-  font-weight: bold;
-}
-
-/* Status Indicators */
-.error {
-  color: #AF5F5F;
-}
-
-.warning {
-  color: #D7AF87;
+pre {
+  background: #f4f4f4;
+  padding: 5px;
+  border-radius: 3px;
+  font-family: monospace;
 }
 
 /* Collapsible Report Section */
@@ -168,3 +83,4 @@ nav ul li a:hover {
   border-radius: 5px;
   background-color: #f9f9f9;
 }
+

@@ -24,7 +24,7 @@ function createSection(title, rules, id, isExpanded = false) {
     <h3 class="collapsible ${isExpanded ? "active" : ""}" style="cursor: pointer;">
       <span class="indicator">${isExpanded ? "▼" : "►"}</span> ${title} (${rules.length})</h3>
     <div class="content" style="display: ${isExpanded ? "block" : "none"};">
-      ${rules.length === 0 ? `<p>No ${title.toLowerCase()} found.</p>` : createTable(rules, id)}
+      ${rules.length === 0 ? `<p>No ${title.toLowerCase()} found.</p>` : createReportTable(rules, id)}
     </div>
   `;
 
@@ -33,64 +33,61 @@ function createSection(title, rules, id, isExpanded = false) {
   const content = section.querySelector(".content");
   const indicator = section.querySelector(".indicator");
 
-  header.addEventListener("click", () => {
+  header.addEventListener("click", (event) => {
     if (event.target.closest("table")) {
       return;
     }
-
     const isHidden = content.style.display === "none";
     content.style.display = isHidden ? "block" : "none";
     header.classList.toggle("active", isHidden);
-    indicator.textContent = isHidden ? "▼" : "►"; // Update indicator
+    indicator.textContent = isHidden ? "▼" : "►";
   });
 
   return section;
 }
 
-function createTable(rules, sectionId) {
-  return `
-    <table class="report-table" data-section="${sectionId}">
-      <thead>
-        <tr>
-          <th data-column="id" data-order="asc">ID</th>
-          <th>Description</th>
-          <th data-column="impact" data-order="asc">Impact</th>
-          <th>Help</th>
-          <th>Nodes</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${renderTableBody(rules)}
-      </tbody>
-    </table>
-  `;
-}
+function createReportTable(issues) {
+  const table = document.createElement("table");
+  table.className = "modern-table";
 
-function renderTableBody(rules) {
-  return rules
-    .map(
-      (rule) => `
-      <tr>
-        <td>${escapeHTML(rule.id)}</td>
-        <td>${escapeHTML(rule.description)}</td>
-        <td class="${rule.impact || "info"}">${escapeHTML(
-        rule.impact || "N/A"
-      )}</td>
-        <td><a href="${rule.helpUrl}" target="_blank">${escapeHTML(rule.help)}</a></td>
-        <td>${rule.nodes
-          .map(
-            (node) => `
-          <details>
-            <summary>${node.target.map(escapeHTML).join(", ")}</summary>
-            <pre>${escapeHTML(node.html)}</pre>
-          </details>
-        `
-          )
-          .join("")}</td>
-      </tr>
-    `
-    )
-    .join("");
+  // Create table header
+  table.innerHTML = `
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Impact</th>
+                <th>Help</th>
+                <th>Affected Elements</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    `;
+
+  const tbody = table.querySelector("tbody");
+
+  // Populate table rows
+  issues.forEach(issue => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+            <td>${escapeHTML(issue.id)}</td>
+            <td>${escapeHTML(issue.description)}</td>
+            <td class="${issue.impact ? issue.impact.toLowerCase() : "info"}">${escapeHTML(issue.impact || "N/A")}</td>
+            <td><a href="${issue.helpUrl}" target="_blank">${escapeHTML(issue.help)}</a></td>
+            <td>
+                <details>
+                    <summary>${issue.nodes.length} elements affected</summary>
+                    ${issue.nodes.map(node => `<pre>${escapeHTML(node.html)}</pre>`).join('')}
+                </details>
+            </td>
+        `;
+
+    tbody.appendChild(row);
+  });
+
+  return table.outerHTML;
 }
 
 async function renderReport() {
@@ -119,15 +116,15 @@ async function renderReport() {
 
       // Create collapsible heading
       const heading = document.createElement("h2");
-      heading.className = "collapsible-report"; // Assign a class for styling
+      heading.className = "collapsible-report";
       heading.innerHTML = `<span class="indicator">▼</span> Report for ${pageName} page`;
 
       // Create content div that holds the sections
       const contentDiv = document.createElement("div");
-      contentDiv.className = "report-content"; // Assign a class for styling
+      contentDiv.className = "report-content";
 
       // Add sections for this file
-      contentDiv.appendChild(createSection("Violations", sectionData.violations, "violations", true)); // Expanded by default
+      contentDiv.appendChild(createSection("Violations", sectionData.violations, "violations", true));
       contentDiv.appendChild(createSection("Incomplete", sectionData.incomplete, "incomplete"));
       contentDiv.appendChild(createSection("Passes", sectionData.passes, "passes"));
       contentDiv.appendChild(createSection("Inapplicable", sectionData.inapplicable, "inapplicable"));
@@ -158,3 +155,4 @@ async function renderReport() {
 }
 
 renderReport();
+
