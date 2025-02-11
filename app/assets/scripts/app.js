@@ -15,21 +15,6 @@ function escapeHTML(str) {
     .replace(/'/g, "&#039;");
 }
 
-function sortRulesByImpact(rules, ascending = true) {
-  const impactOrder = { minor: 1, moderate: 2, serious: 3 };
-  return rules.sort((a, b) => {
-    const comparison = (impactOrder[a.impact] || 4) - (impactOrder[b.impact] || 4);
-    return ascending ? comparison : -comparison;
-  });
-}
-
-function sortRulesById(rules, ascending = true) {
-  return rules.sort((a, b) => {
-    const comparison = a.id.localeCompare(b.id);
-    return ascending ? comparison : -comparison;
-  });
-}
-
 function createSection(title, rules, id, isExpanded = false) {
   const section = document.createElement("section");
   section.id = id;
