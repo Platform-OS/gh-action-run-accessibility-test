@@ -108,37 +108,6 @@ function renderTableBody(rules) {
     .join("");
 }
 
-function addSortingListeners(data) {
-  const report = document.getElementById("reports");
-
-  report.addEventListener("click", (event) => {
-    const header = event.target.closest(".sortable");
-    if (!header) return;
-
-    const table = header.closest("table");
-    const sectionId = table.dataset.section;
-    const column = header.dataset.column;
-    const ascending = header.dataset.order === "asc";
-
-    let sortedRules = [];
-    if (column === "id") {
-      sortedRules = sortRulesById([...data[sectionId]], ascending);
-    } else if (column === "impact") {
-      sortedRules = sortRulesByImpact([...data[sectionId]], ascending);
-    }
-
-    // Toggle the sorting order for the next click
-    header.dataset.order = ascending ? "desc" : "asc";
-
-    // Update only the <tbody> content
-    const tbody = table.querySelector("tbody");
-    tbody.innerHTML = renderTableBody(sortedRules);
-
-    // Update the data for the section
-    data[sectionId] = sortedRules;
-  });
-}
-
 async function renderReport() {
   const report = document.getElementById("reports");
   const reportFiles = jsonFiles;
@@ -150,7 +119,7 @@ async function renderReport() {
       const data = await loadJSON(file);
       const pageName = file.match(/scripts\/(\w+)/)[1];
 
-      // Organize data by section for sorting
+      // Organize data by section
       const sectionData = {
         violations: data.violations,
         incomplete: data.incomplete,
@@ -176,9 +145,6 @@ async function renderReport() {
 
       // Append the wrapper to the main report container
       report.appendChild(reportWrapper);
-
-      // Add sorting listeners for this file's sections using event delegation
-      addSortingListeners(sectionData);
     } catch (error) {
       console.error(error);
       const errorWrapper = document.createElement("div");
