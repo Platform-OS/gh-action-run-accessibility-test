@@ -102,7 +102,7 @@ async function renderReport() {
   for (const file of reportFiles) {
     try {
       const data = await loadJSON(file);
-      const pageName = file.match(/scripts\/(\w+)/)[1];
+      const pageName = file.match(/(\w+)-accessibility-scan-results\.json/)[1]; // Extract page name
 
       // Organize data by section
       const sectionData = {
@@ -115,21 +115,38 @@ async function renderReport() {
       // Create a parent wrapper for this file's sections
       const reportWrapper = document.createElement("div");
       reportWrapper.className = "report-wrapper";
-      reportWrapper.id = `report-wrapper-${pageName}`; // Optional: Add unique ID for each wrapper
+      reportWrapper.id = `report-wrapper-${pageName}`;
 
-      // Add an h2 heading to the wrapper
+      // Create collapsible heading
       const heading = document.createElement("h2");
-      heading.textContent = `Report for ${pageName} page`;
-      reportWrapper.appendChild(heading);
+      heading.className = "collapsible-report"; // Assign a class for styling
+      heading.innerHTML = `<span class="indicator">▼</span> Report for ${pageName} page`;
+
+      // Create content div that holds the sections
+      const contentDiv = document.createElement("div");
+      contentDiv.className = "report-content"; // Assign a class for styling
 
       // Add sections for this file
-      reportWrapper.appendChild(createSection("Violations", sectionData.violations, "violations", true)); // Expanded by default
-      reportWrapper.appendChild(createSection("Incomplete", sectionData.incomplete, "incomplete"));
-      reportWrapper.appendChild(createSection("Passes", sectionData.passes, "passes"));
-      reportWrapper.appendChild(createSection("Inapplicable", sectionData.inapplicable, "inapplicable"));
+      contentDiv.appendChild(createSection("Violations", sectionData.violations, "violations", true)); // Expanded by default
+      contentDiv.appendChild(createSection("Incomplete", sectionData.incomplete, "incomplete"));
+      contentDiv.appendChild(createSection("Passes", sectionData.passes, "passes"));
+      contentDiv.appendChild(createSection("Inapplicable", sectionData.inapplicable, "inapplicable"));
+
+      // Append the heading and contentDiv to the reportWrapper
+      reportWrapper.appendChild(heading);
+      reportWrapper.appendChild(contentDiv);
 
       // Append the wrapper to the main report container
       report.appendChild(reportWrapper);
+
+      // Add click event for collapsibility
+      heading.addEventListener("click", () => {
+        const isHidden = contentDiv.style.display === "none";
+        contentDiv.style.display = isHidden ? "block" : "none";
+        heading.classList.toggle("active", isHidden);
+        heading.querySelector(".indicator").textContent = isHidden ? "▼" : "►";
+      });
+
     } catch (error) {
       console.error(error);
       const errorWrapper = document.createElement("div");
