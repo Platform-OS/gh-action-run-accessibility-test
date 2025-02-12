@@ -99,7 +99,7 @@ async function renderReport() {
   for (const file of reportFiles) {
     try {
       const data = await loadJSON(file);
-      const pageName = file.match(/(\w+)-accessibility-scan-results\.json/)[1]; // Extract page name
+      const pageName = file.match(/\/assets\/scripts\/(.*?)-accessibility-scan-results\.json/)[1]; // Extract page name
 
       // Organize data by section
       const sectionData = {
@@ -117,7 +117,7 @@ async function renderReport() {
       // Create collapsible heading
       const heading = document.createElement("h2");
       heading.className = "collapsible-report";
-      heading.innerHTML = `<span class="indicator">▼</span> Report for ${pageName} page`;
+      heading.innerHTML = `<span class="indicator">▼</span> Report for&nbsp;<a href="${data.url}">${pageName}</a>&nbsp;page`;
 
       // Create content div that holds the sections
       const contentDiv = document.createElement("div");
