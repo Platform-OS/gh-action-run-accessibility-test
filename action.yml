@@ -4,6 +4,9 @@ inputs:
   test-name:
     description: 'test name'
     required: true
+  deploy-report:
+    required: false
+    default: true
   before:
     required: false
   after:
@@ -39,7 +42,7 @@ runs:
 
       - name: publish report ${{ inputs.test-name }}
         id: publish-report
-        if:  ${{ !inputs.skip && always() }}
+        if:  ${{ !inputs.skip && always() && inputs.deploy-report }}
         shell: sh
         run: |
           set -eu
@@ -75,7 +78,7 @@ runs:
           rm -rf playwright-report
 
       - name: summary
-        if:  ${{ !inputs.skip && always() }}
+        if:  ${{ !inputs.skip && always() && inputs.deploy-report }}
         shell: sh
         run: |
           echo "### TEST REPORT" >> $GITHUB_STEP_SUMMARY
