@@ -52,14 +52,16 @@ runs:
           PAGE_DIR=$REPORT_DIR/app/views/pages
           ASSETS_DIR=$REPORT_DIR/app/assets
           IMAGE_DIR=$ASSETS_DIR/images
-          SCRIPT_DIR=$ASSETS_DIR/scripts
+          SCRIPT_DIR=$ASSETS_DIR/scripts/$TIMESTAMP
           MPKIT_URL=$TEST_REPORT_MPKIT_URL
           MPKIT_TOKEN=$TEST_REPORT_MPKIT_TOKEN
 
           cp -r $ACTION_PATH/app $REPORT_DIR
 
           mv $PAGE_DIR/index.liquid $PAGE_DIR/$TIMESTAMP.liquid
+          sed -i "s|scripts/json_files.js|scripts/$TIMESTAMP/json_files.js|" $PAGE_DIR/$TIMESTAMP.liquid
 
+          mkdir -p $SCRIPT_DIR
           cp $TEST_RESULTS_DIR/**/*.json $SCRIPT_DIR
           $ACTION_PATH/list-json-files.sh $SCRIPT_DIR
 

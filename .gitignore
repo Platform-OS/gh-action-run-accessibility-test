@@ -1,2 +1,5 @@
 .pos
 tmp/
+*-accessibility-scan-results.json
+json_files.js
+playwright-report/

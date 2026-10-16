@@ -99,7 +99,7 @@ async function renderReport() {
   for (const file of reportFiles) {
     try {
       const data = await loadJSON(file);
-      const pageName = file.match(/\/assets\/scripts\/(.*?)-accessibility-scan-results\.json/)[1]; // Extract page name
+      const pageName = file.match(/([^/?]+)-accessibility-scan-results\.json/)[1]; // Extract page name
 
       // Organize data by section
       const sectionData = {
