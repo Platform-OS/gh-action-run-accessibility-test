@@ -53,7 +53,8 @@ runs:
           ASSETS_DIR=$REPORT_DIR/app/assets
           IMAGE_DIR=$ASSETS_DIR/images
           SCRIPT_DIR=$ASSETS_DIR/scripts
-          MPKIT_URL=$UPLOAD_HOST
+          MPKIT_URL=$TEST_REPORT_MPKIT_URL
+          MPKIT_TOKEN=$TEST_REPORT_MPKIT_TOKEN
 
           cp -r $ACTION_PATH/app $REPORT_DIR
 
